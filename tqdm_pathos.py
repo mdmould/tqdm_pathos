@@ -78,11 +78,11 @@ def map_or_starmap(which, func, iterable, args, kwargs):
 
     chunksize = get_chunksize(n_tasks, len(pool._pool))
     result = pool.map_async(_func, func_iterable_args_kwargs, chunksize)
-    async_pbar(result, n_tasks, chunksize)
-    output = result.get()
-
     if close_pool:
         pool.close()
+    async_pbar(result, n_tasks, chunksize)
+    output = result.get()
+    if close_pool:
         pool.join()
 
     return output
