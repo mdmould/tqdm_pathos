@@ -1,7 +1,7 @@
 # tqdm_pathos
 Progress bars for multiprocessing with pathos
 
-Wrappers based on [parmap](https://github.com/zeehio/parmap) for [multiprocessing](https://pathos.readthedocs.io/en/latest/pathos.html#module-pathos.multiprocessing) with [pathos](https://github.com/uqfoundation/pathos) and progress bar completion with [tqdm](https://tqdm.github.io/). Following parmap, multiprocessing is extended to functions of multiple iterables, arguments, and keyword arguments.
+Wrappers based on [parmap](https://github.com/zeehio/parmap) for multiprocessing with [pathos](https://pathos.readthedocs.io/en/latest/pathos.html#module-pathos.pools) and progress bar completion with [tqdm](https://tqdm.github.io/). Following parmap, multiprocessing is extended to functions of multiple iterables, arguments, and keyword arguments.
 
 While parmap includes these extensions and a progress bar, it is built on the default [multiprocessing](https://docs.python.org/3/library/multiprocessing.html) library. The multiprocessing/pools module in pathos includes enhanced serialization to allow multiprocessing of, e.g., lambda functions, class methods, etc.
 
