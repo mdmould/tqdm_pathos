@@ -92,7 +92,7 @@ def map(func, iterable, *args, n_cpus=CPUs, pool=None, **kwargs):
 
     return map_or_starmap(
         'map', func, iterable, args,
-        {**{'n_cpus': n_cpus, 'pool': pool}, **kwargs},
+        {'n_cpus': n_cpus, 'pool': pool, **kwargs},
         )
 
 
@@ -100,7 +100,7 @@ def starmap(func, iterables, *args, n_cpus=CPUs, pool=None, **kwargs):
 
     return map_or_starmap(
         'starmap', func, iterables, args,
-        {**{'n_cpus': n_cpus, 'pool': pool}, **kwargs},
+        {'n_cpus': n_cpus, 'pool': pool, **kwargs},
         )
 
 
@@ -143,7 +143,7 @@ def _map(func, iterable, *args, n_cpus=CPUs, pool=None, **kwargs):
 
     return _map_or_starmap(
         'map', func, iterable, args,
-        {**{'n_cpus': n_cpus, 'pool': pool}, **kwargs},
+        {'n_cpus': n_cpus, 'pool': pool, **kwargs},
         )
 
 
@@ -151,6 +151,6 @@ def _starmap(func, iterables, *args, n_cpus=CPUs, pool=None, **kwargs):
 
     return _map_or_starmap(
         'starmap', func, iterables, args,
-        {**{'n_cpus': n_cpus, 'pool': pool}, **kwargs},
+        {'n_cpus': n_cpus, 'pool': pool, **kwargs},
         )
 
