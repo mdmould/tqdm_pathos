@@ -90,12 +90,18 @@ def map_or_starmap(which, func, iterable, args, kwargs):
 
 def map(func, iterable, *args, n_cpus=CPUs, pool=None, **kwargs):
 
-    return map_or_starmap('map', func, iterable, args, {**{'n_cpus': n_cpus, 'pool': pool}, **kwargs})
+    return map_or_starmap(
+        'map', func, iterable, args,
+        {**{'n_cpus': n_cpus, 'pool': pool}, **kwargs},
+        )
 
 
 def starmap(func, iterables, *args, n_cpus=CPUs, pool=None, **kwargs):
 
-    return map_or_starmap('starmap', func, iterables, args, {**{'n_cpus': n_cpus, 'pool': pool}, **kwargs})
+    return map_or_starmap(
+        'starmap', func, iterables, args,
+        {**{'n_cpus': n_cpus, 'pool': pool}, **kwargs},
+        )
 
 
 def _map_or_starmap(which, func, iterable, args, kwargs):
@@ -120,20 +126,31 @@ def _map_or_starmap(which, func, iterable, args, kwargs):
 
     if pool is not None:
         chunksize = get_chunksize(n_tasks, len(pool._pool))
-        return list(tqdm(pool.imap(_func, func_iterable_args_kwargs, chunksize), total=n_tasks))
+        return list(tqdm(
+            pool.imap(_func, func_iterable_args_kwargs, chunksize),
+            total=n_tasks,
+            ))
 
     with pathos.pools._ProcessPool(n_cpus) as pool:
         chunksize = get_chunksize(n_tasks, n_cpus)
-        return list(tqdm(pool.imap(_func, func_iterable_args_kwargs, chunksize), total=n_tasks))
+        return list(tqdm(
+            pool.imap(_func, func_iterable_args_kwargs, chunksize),
+            total=n_tasks,
+            ))
 
 
 def _map(func, iterable, *args, n_cpus=CPUs, pool=None, **kwargs):
 
-    return _map_or_starmap('map', func, iterable, args, {**{'n_cpus': n_cpus, 'pool': pool}, **kwargs})
+    return _map_or_starmap(
+        'map', func, iterable, args,
+        {**{'n_cpus': n_cpus, 'pool': pool}, **kwargs},
+        )
 
 
 def _starmap(func, iterables, *args, n_cpus=CPUs, pool=None, **kwargs):
 
-    return _map_or_starmap('starmap', func, iterables, args, {**{'n_cpus': n_cpus, 'pool': pool}, **kwargs})
-
+    return _map_or_starmap(
+        'starmap', func, iterables, args,
+        {**{'n_cpus': n_cpus, 'pool': pool}, **kwargs},
+        )
 
