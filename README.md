@@ -31,7 +31,7 @@ a = 1
 b = 0
     
 # Serial
-y = [f(x, a, b=b) for x in iterable)]
+y = [f(x, a, b=b) for x in iterable]
 
 # Parallel
 y = tqdm_pathos.map(f, iterable, a, b=b)
@@ -50,7 +50,7 @@ z = [f(x, y) for x, y in zip(iterable1, iterable2)]
 z = tqdm_pathos.starmap(f, zip(iterable1, iterable2))
 ```
 
-Function of multiple iterable, with non-iterable args and kwargs:
+Function of multiple iterables, with non-iterable args and kwargs:
 ```
 def f(x, y, a, b=0):
     return x * y * a + b
@@ -65,5 +65,4 @@ z = [f(x, y, a, b=b) for x, y in zip(iterable1, iterable2)]
 # Parallel
 z = tqdm_pathos.starmap(f, zip(iterable1, iterable2), a, b=b)
 ```
-
 
