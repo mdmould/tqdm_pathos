@@ -1,30 +1,23 @@
-from distutils.core import setup
+from setuptools import setup, find_packages
 
-setup(name='tqdm_pathos',
-      packages = ['tqdm_pathos'],
-      version='0.1',
-      description='tqdm progress bar for pathos multiprocessing with additional arguments',
-      url='https://github.com/mdmould/tqdm_pathos',
-      download_url = 'https://github.com/mdmould/tqdm_pathos/archive/refs/tags/0.1.tar.gz',
-      author='Matthew Mould',
-      author_email='mattdmould@gmail.com',
-      keywords = ['multiprocessing'],
-      license='MIT',
+name = 'tqdm_pathos'
+version = '0.2'
 
-      install_requires=['pathos','tqdm',],  #YOUR DEPENDENCIES HERE
-  
+with open('README.md' ,'r') as f:
+    long_description = f.read().strip()
 
-      classifiers=[
-        'Development Status :: 3 - Alpha',
-        'Intended Audience :: Developers',
-        'Topic :: Software Development :: Build Tools',
-        'License :: OSI Approved :: MIT License',
-        'Operating System :: OS Independent',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: 3.9',
-        'Programming Language :: Python :: 3.10',
-        ],
-)
+setup(
+    name=name,
+    version=version,
+    description=name,
+    long_description=long_description,
+    long_description_content_type='text/markdown',
+    url=f'https://github.com/mdmould/{name}',
+    author='Matthew Mould',
+    author_email='mattdmould@gmail.com',
+    license='MIT',
+    packages=find_packages(),
+    install_requires=['pathos', 'tqdm'],
+    python_requires='>=3.7',
+    )
 
