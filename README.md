@@ -7,7 +7,7 @@ While parmap includes these extensions and a progress bar, it is built on the de
 
 ## Installation
 
-You can `pip install tqdm-pathos'.
+You can `pip install tqdm-pathos`.
 
 ## Usage
 
