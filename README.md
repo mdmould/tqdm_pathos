@@ -5,6 +5,10 @@ Wrappers based on [parmap](https://github.com/zeehio/parmap) for multiprocessing
 
 While parmap includes these extensions and a progress bar, it is built on the default [multiprocessing](https://docs.python.org/3/library/multiprocessing.html) library. The multiprocessing/pools module in pathos includes enhanced serialization to allow multiprocessing of, e.g., lambda functions, class methods, etc.
 
+## Installation
+
+You can `pip install tqdm-pathos'.
+
 ## Usage
 
 A pool with an automatically detected number of cores is set up by default. To choose the number of cores, use the `n_cpus` kwarg.
