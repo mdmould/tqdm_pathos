@@ -1,3 +1,5 @@
+*.python-version
+
 # Development files and python cache
 /*.pyc
 /*.egg
