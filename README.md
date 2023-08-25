@@ -13,6 +13,7 @@ You can `pip install tqdm-pathos`.
 
 A pool with an automatically detected number of cores is set up by default. To choose the number of cores, use the `n_cpus` kwarg.
 Alternatively, an existing pool can be used by passing it to the `pool` kwarg.
+Extra `kwargs` can be passed to the `tqdm` progress bar using the `tqdm_kwargs` dictionary argument, e.g., `tqdm_kwargs = {'desc': 'pbar description'}`.
 
 Function of a single iterable:
 ```

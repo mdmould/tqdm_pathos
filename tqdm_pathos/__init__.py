@@ -30,11 +30,11 @@ def func_starmap(func_iterables_args_kwargs):
     return func(*list(iterables) + args, **kwargs)
 
 
-def async_pbar(result, n_tasks, chunksize):
+def async_pbar(result, n_tasks, chunksize, tqdm_kwargs):
 
     remaining = n_tasks
 
-    with tqdm(total=n_tasks) as pbar:
+    with tqdm(total=n_tasks, **tqdm_kwargs) as pbar:
         while True:
             if result.ready():
                 pbar.update(remaining)
@@ -50,7 +50,7 @@ def async_pbar(result, n_tasks, chunksize):
             result.wait(1)
 
 
-def map_or_starmap(which, func, iterable, args, kwargs):
+def map_or_starmap(which, func, iterable, args, kwargs, tqdm_kwargs):
 
     n_cpus = kwargs.pop('n_cpus', CPUs)
     pool = kwargs.pop('pool', None)
@@ -64,11 +64,6 @@ def map_or_starmap(which, func, iterable, args, kwargs):
         repeat(list(args)),
         repeat(kwargs),
         )
-
-    if which == 'map':
-        _func = func_map
-    elif which == 'starmap':
-        _func = func_starmap
 
     if pool is None:
         pool = pathos.pools._ProcessPool(n_cpus)
@@ -77,10 +72,10 @@ def map_or_starmap(which, func, iterable, args, kwargs):
         close_pool = False
 
     chunksize = get_chunksize(n_tasks, len(pool._pool))
-    result = pool.map_async(_func, func_iterable_args_kwargs, chunksize)
+    result = pool.map_async(which, func_iterable_args_kwargs, chunksize)
     if close_pool:
         pool.close()
-    async_pbar(result, n_tasks, chunksize)
+    async_pbar(result, n_tasks, chunksize, tqdm_kwargs)
     output = result.get()
     if close_pool:
         pool.join()
@@ -88,69 +83,93 @@ def map_or_starmap(which, func, iterable, args, kwargs):
     return output
 
 
-def map(func, iterable, *args, n_cpus=CPUs, pool=None, **kwargs):
+def map(
+    func,
+    iterable,
+    *args,
+    n_cpus=CPUs,
+    pool=None,
+    tqdm_kwargs={},
+    **kwargs,
+    ):
 
     return map_or_starmap(
-        'map', func, iterable, args,
-        {'n_cpus': n_cpus, 'pool': pool, **kwargs},
-        )
-
-
-def starmap(func, iterables, *args, n_cpus=CPUs, pool=None, **kwargs):
-
-    return map_or_starmap(
-        'starmap', func, iterables, args,
-        {'n_cpus': n_cpus, 'pool': pool, **kwargs},
-        )
-
-
-def _map_or_starmap(which, func, iterable, args, kwargs):
-
-    n_cpus = kwargs.pop('n_cpus', CPUs)
-    pool = kwargs.pop('pool', None)
-
-    iterable = list(iterable)
-    n_tasks = len(iterable)
-
-    func_iterable_args_kwargs = zip(
-        repeat(func),
+        func_map,
+        func,
         iterable,
-        repeat(list(args)),
-        repeat(kwargs),
-        )
-
-    if which == 'map':
-        _func = func_map
-    elif which == 'starmap':
-        _func = func_starmap
-
-    if pool is not None:
-        chunksize = get_chunksize(n_tasks, len(pool._pool))
-        return list(tqdm(
-            pool.imap(_func, func_iterable_args_kwargs, chunksize),
-            total=n_tasks,
-            ))
-
-    with pathos.pools._ProcessPool(n_cpus) as pool:
-        chunksize = get_chunksize(n_tasks, n_cpus)
-        return list(tqdm(
-            pool.imap(_func, func_iterable_args_kwargs, chunksize),
-            total=n_tasks,
-            ))
-
-
-def _map(func, iterable, *args, n_cpus=CPUs, pool=None, **kwargs):
-
-    return _map_or_starmap(
-        'map', func, iterable, args,
+        args,
         {'n_cpus': n_cpus, 'pool': pool, **kwargs},
+        tqdm_kwargs,
         )
 
 
-def _starmap(func, iterables, *args, n_cpus=CPUs, pool=None, **kwargs):
+def starmap(
+    func,
+    iterables,
+    *args,
+    n_cpus=CPUs,
+    pool=None,
+    tqdm_kwargs={},
+    **kwargs,
+    ):
 
-    return _map_or_starmap(
-        'starmap', func, iterables, args,
+    return map_or_starmap(
+        func_starmap,
+        func,
+        iterables,
+        args,
         {'n_cpus': n_cpus, 'pool': pool, **kwargs},
+        tqdm_kwargs,
         )
+
+
+# def _map_or_starmap(which, func, iterable, args, kwargs):
+
+#     n_cpus = kwargs.pop('n_cpus', CPUs)
+#     pool = kwargs.pop('pool', None)
+
+#     iterable = list(iterable)
+#     n_tasks = len(iterable)
+
+#     func_iterable_args_kwargs = zip(
+#         repeat(func),
+#         iterable,
+#         repeat(list(args)),
+#         repeat(kwargs),
+#         )
+
+#     if which == 'map':
+#         _func = func_map
+#     elif which == 'starmap':
+#         _func = func_starmap
+
+#     if pool is not None:
+#         chunksize = get_chunksize(n_tasks, len(pool._pool))
+#         return list(tqdm(
+#             pool.imap(_func, func_iterable_args_kwargs, chunksize),
+#             total=n_tasks,
+#             ))
+
+#     with pathos.pools._ProcessPool(n_cpus) as pool:
+#         chunksize = get_chunksize(n_tasks, n_cpus)
+#         return list(tqdm(
+#             pool.imap(_func, func_iterable_args_kwargs, chunksize),
+#             total=n_tasks,
+#             ))
+
+
+# def _map(func, iterable, *args, n_cpus=CPUs, pool=None, **kwargs):
+
+#     return _map_or_starmap(
+#         'map', func, iterable, args,
+#         {'n_cpus': n_cpus, 'pool': pool, **kwargs},
+#         )
+
+
+# def _starmap(func, iterables, *args, n_cpus=CPUs, pool=None, **kwargs):
+
+#     return _map_or_starmap(
+#         'starmap', func, iterables, args,
+#         {'n_cpus': n_cpus, 'pool': pool, **kwargs},
+#         )
 
