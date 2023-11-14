@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 name = 'tqdm_pathos'
-version = '0.3'
+version = '0.4'
 
 with open('README.md' ,'r') as f:
     long_description = f.read().strip()
@@ -20,4 +20,3 @@ setup(
     install_requires=['pathos', 'tqdm'],
     python_requires='>=3.7',
     )
-
