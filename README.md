@@ -16,7 +16,7 @@ Alternatively, an existing pool can be used by passing it to the `pool` kwarg.
 Extra `kwargs` can be passed to the `tqdm` progress bar using the `tqdm_kwargs` dictionary argument, e.g., `tqdm_kwargs = {'desc': 'pbar description'}`.
 
 Function of a single iterable:
-```
+```python
 f = lambda x: x**2
 iterable = [1, 2, 3]
 
@@ -28,7 +28,7 @@ y = tqdm_pathos.map(f, iterable)
 ```
 
 Function of a single iterable, with non-iterable args and kwargs:
-```
+```python
 def f(x, a, b=0):
     return x**2 * a + b
 iterable = [1, 2, 3]
@@ -43,7 +43,7 @@ y = tqdm_pathos.map(f, iterable, a, b=b)
 ```
 
 Function of multiple iterables:
-```
+```python
 f = lambda x, y: x * y
 iterable1 = [1, 2, 3]
 iterable2 = [4, 5, 6]
@@ -56,7 +56,7 @@ z = tqdm_pathos.starmap(f, zip(iterable1, iterable2))
 ```
 
 Function of multiple iterables, with non-iterable args and kwargs:
-```
+```python
 def f(x, y, a, b=0):
     return x * y * a + b
 iterable1 = [1, 2, 3]
